@@ -113,13 +113,11 @@ cell_type = IF_cond_exp(**neuronParameters)
 # Simulation time setup
 
 timePreSim 	= 60000 		# 1 min (60000 ms)
-timeSimFig4A 	= 1000000
-timeSimFig4B 	= 2600000		# 60 min (60 * 60 * 1000 ms)
-timeSimFig4C 	= 5000			# 5 sec (5000 ms)
-timeSimFig4D 	= 3600000 - 5000 	# 60 min (60 * 60 * 1000 ms)
-timeSimFig4E_part1 = 1000
-timeSimFig4E_part2 = 4000		# 5 sec (5000 ms)
-
+timeSimFig4A 	= 3600000   # 60 min (60 * 60 * 1000 ms)
+timeSimFig4B 	= 5000      # 5 secs (5000 ms)
+timeSimFig4C 	= 3600000   # 60 min (60 * 60 * 1000 ms)
+timeSimFig4D 	= 5000      # 5 secs (5000 ms)
+timeSimFig4E = 200          # 200 ms
 
 timeBoundKernel = 300
 
@@ -136,8 +134,7 @@ timeSimFig4A 	= int(round(timeSimFig4A/downscaleFactor))
 timeSimFig4B 	= int(round(timeSimFig4B/downscaleFactor))
 timeSimFig4C 	= int(round(timeSimFig4C/downscaleFactor))
 timeSimFig4D 	= int(round(timeSimFig4D/downscaleFactor))
-timeSimFig4E_part1 = int(round(timeSimFig4E_part1/downscaleFactor))
-timeSimFig4E_part2 = int(round(timeSimFig4E_part2/downscaleFactor))
+timeSimFig4E = int(round(timeSimFig4E/downscaleFactor))
 
 if timePreSim <= minSimTime:
 	timePreSim = minSimTime
@@ -149,15 +146,8 @@ if timeSimFig4C <= minSimTime:
 	timeSimFig4C = minSimTime
 if timeSimFig4D <= minSimTime:
 	timeSimFig4D = minSimTime
-if timeSimFig4E_part1 <= minSimTime:
-	timeSimFig4E_part1 = minSimTime
-if timeSimFig4E_part2 <= minSimTime:
-	timeSimFig4E_part2 = minSimTime
-
-
-
-
-
+if timeSimFig4E <= minSimTime:
+	timeSimFig4E = minSimTime
 
 
 timer.start()
@@ -439,7 +429,7 @@ sampledPopControlSpikes_corr = sampledPopControl_corr.get_data(		'spikes', clear
 
 
 plt.ion()
-fig = plt.figure(2, facecolor='white')
+fig = plt.figure(2, figsize=(40, 12), facecolor='white')
 
 simTimeIni = 0
 simTimeFin = timePreSim
@@ -720,32 +710,14 @@ connections['stim_to_pattern1_stim'] 	= Projection(stimulus, 	pattern1_stim, 		f
 
 print("\nContinuing simulation...")
 
-print("\nSimulation time: %s milliseconds" %timeSimFig4E_part1)
+print("\nSimulation time: %s milliseconds" %timeSimFig4E)
 
-run(timeSimFig4E_part1)
-
-
-simCPUTime_4E_part1 = timer.diff()
-
-print("\nTime to perform the simulation: %d seconds (%0.2f minutes)" %(simCPUTime_4E_part1, simCPUTime_4E_part1/60))
-
-'''
-connections['stim_to_subPopPattern1Stim'].set(weight = 0)
-'''
-
-connections['stim_to_pattern1_stim'].set(weight = 0)
+run(timeSimFig4E)
 
 
-print("\nContinuing simulation...")
+simCPUTime_4E = timer.diff()
 
-print("\nSimulation time: %s milliseconds" %timeSimFig4E_part2)
-
-run(timeSimFig4E_part2)
-
-
-simCPUTime_4E_part2 = timer.diff()
-
-print("\nTime to perform the simulation: %d seconds (%0.2f minutes)" %(simCPUTime_4E_part2, simCPUTime_4E_part2/60))
+print("\nTime to perform the simulation: %d seconds (%0.2f minutes)" %(simCPUTime_4E, simCPUTime_4E/60))
 
 print("\nploting Fig. 4E")
 
@@ -765,7 +737,7 @@ sampledPopControlSpikes_corr = sampledPopControl_corr.get_data(		'spikes', clear
 
 
 simTimeIni = timePreSim + timeSimFig4A +timeSimFig4B + timeSimFig4C + timeSimFig4D
-simTimeFin = timePreSim + timeSimFig4A +timeSimFig4B + timeSimFig4C + timeSimFig4D + timeSimFig4E_part1 + timeSimFig4E_part2
+simTimeFin = timePreSim + timeSimFig4A +timeSimFig4B + timeSimFig4C + timeSimFig4D + timeSimFig4E
 
 im = plotFig4Column(fig, 6, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
 		excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
@@ -777,7 +749,7 @@ plt.show()
 
 print("\nTotal simulated time: %s milliseconds" %simTimeFin)
 
-totalCPUTime = simCPUTime_pre + simCPUTime_4A + simCPUTime_4B + simCPUTime_4C + simCPUTime_4D + simCPUTime_4E_part1 + simCPUTime_4E_part2
+totalCPUTime = simCPUTime_pre + simCPUTime_4A + simCPUTime_4B + simCPUTime_4C + simCPUTime_4D + simCPUTime_4E
 
 print("\nTotal CPU time: %d seconds (%0.2f minutes)" %(totalCPUTime, totalCPUTime/60))
 

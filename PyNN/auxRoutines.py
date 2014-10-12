@@ -740,8 +740,10 @@ def plotFig4Column(fig, column, timeStep, simTimeIni, simTimeFin, timeBoundKerne
 	else:
 		ax2.get_yaxis().set_visible(False)
 		#plt.xlim((0.0, 200.0))
-	
+
 	plt.ylim((-15, 15))
+	plt.xlim((simTimeIni, simTimeIni+150))
+	plt.xticks(rotation=45)
 	#plotRaster(ax2, pattern1Spikes, 'red')
 	plotRaster3(ax2, sampledPopPattern1Spikes, 'red', 1)
 	plotRaster3(ax2, sampledPopControlSpikes, 'black', -1)
