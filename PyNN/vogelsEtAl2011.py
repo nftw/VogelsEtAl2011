@@ -21,8 +21,7 @@ Adapted from:
 
 
 from pyNN.random import RandomDistribution, NumpyRNG
-from pyNN.utility import get_script_args, Timer, ProgressBar, init_logging, normalized_filename
-import matplotlib.pyplot as plt
+from pyNN.utility import get_script_args, Timer, ProgressBar
 from auxRoutines import *
 
 simulator_name = get_script_args(1)[0]
@@ -95,7 +94,6 @@ neuronParameters = {
 
 cell_type = IF_cond_exp(**neuronParameters)
 
-
 # Simulation time setup
 
 timePreSim = 60000  # 1 min (60000 ms)
@@ -108,9 +106,9 @@ timeSimFig4E = 200  # 200 ms
 timeBoundKernel = 300
 
 
-### SIMULATION TIMES WERE DOWNSCALED FOR TESTING PURPOSES
+# ## SIMULATION TIMES WERE DOWNSCALED FOR TESTING PURPOSES
 
-downscaleFactor = 100
+downscaleFactor = 10000
 minSimTime = 50  # [ms]
 
 eta *= downscaleFactor
@@ -385,29 +383,15 @@ sampledPopControl_ISICV = controlPopulation.sample(numOfSampledNeuronsControl_IS
 sampledPopPattern1Spikes_corr = sampledPopPattern1_corr.get_data('spikes', clear="true")
 sampledPopControlSpikes_corr = sampledPopControl_corr.get_data('spikes', clear="true")
 
-#sampledPopPattern1Spikes_ISICV = sampledPopPattern1_ISICV.get_data(	'spikes', clear="true")
-#sampledPopControlSpikes_ISICV = sampledPopControl_ISICV.get_data(	'spikes', clear="true")
-
-
 plt.ion()
-fig = plt.figure(2, figsize=(40, 12), facecolor='white')
+fig = plt.figure(2, figsize=(18, 10), dpi=60, facecolor='white')
 
 simTimeIni = 0
 simTimeFin = timePreSim
 
-im = plotFig4Column(fig, 1, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
-                    excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
-                    numOfSampledNeuronsPattern1_corr, sampledPopPattern1Spikes_corr, numOfSampledNeuronsControl_corr, sampledPopControlSpikes_corr)
-
-
-#fig.subplots_adjust(left=0.8)
-cbar_ax = fig.add_axes([0.08, 0.73, 0.01, 0.15])
-#cbar_ax.set_ylabel('Rate [Hz]')
-
-cbar = fig.colorbar(im, cax=cbar_ax, ticks=[0, 50, 100, 150, 200])
-cbar.ax.set_yticklabels(['0', '50', '100', '150', '200'])
-cbar.ax.set_ylabel('Rate [Hz]')
-cbar.ax.yaxis.labelpad = -50
+im = plot_fig4_column(fig, 1, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
+                      excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
+                      sampledPopPattern1Spikes_corr, sampledPopControlSpikes_corr)
 
 plt.show(block=False)
 fig.canvas.draw()
@@ -465,9 +449,9 @@ print("\nPloting Fig. 4A...")
 simTimeIni = timePreSim
 simTimeFin = timePreSim + timeSimFig4A
 
-plotFig4Column(fig, 2, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
-               excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
-               numOfSampledNeuronsPattern1_corr, sampledPopPattern1Spikes_corr, numOfSampledNeuronsControl_corr, sampledPopControlSpikes_corr)
+plot_fig4_column(fig, 2, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
+                 excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
+                 sampledPopPattern1Spikes_corr, sampledPopControlSpikes_corr)
 
 #plt.show(block=False)
 fig.canvas.draw()
@@ -505,9 +489,9 @@ print("\nPloting Fig. 4B...")
 simTimeIni = timePreSim + timeSimFig4A
 simTimeFin = timePreSim + timeSimFig4A + timeSimFig4B
 
-plotFig4Column(fig, 3, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
-               excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
-               numOfSampledNeuronsPattern1_corr, sampledPopPattern1Spikes_corr, numOfSampledNeuronsControl_corr, sampledPopControlSpikes_corr)
+plot_fig4_column(fig, 3, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
+                 excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
+                 sampledPopPattern1Spikes_corr, sampledPopControlSpikes_corr)
 
 #plt.show(block=False)
 fig.canvas.draw()
@@ -569,9 +553,9 @@ print("\nPloting Fig. 4C...")
 simTimeIni = timePreSim + timeSimFig4A + timeSimFig4B
 simTimeFin = timePreSim + timeSimFig4A + timeSimFig4B + timeSimFig4C
 
-plotFig4Column(fig, 4, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
-               excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
-               numOfSampledNeuronsPattern1_corr, sampledPopPattern1Spikes_corr, numOfSampledNeuronsControl_corr, sampledPopControlSpikes_corr)
+plot_fig4_column(fig, 4, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
+                 excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
+                 sampledPopPattern1Spikes_corr, sampledPopControlSpikes_corr)
 
 fig.canvas.draw()
 
@@ -609,9 +593,9 @@ sampledPopControlSpikes_corr = sampledPopControl_corr.get_data('spikes', clear="
 simTimeIni = timePreSim + timeSimFig4A + timeSimFig4B + timeSimFig4C
 simTimeFin = timePreSim + timeSimFig4A + timeSimFig4B + timeSimFig4C + timeSimFig4D
 
-plotFig4Column(fig, 5, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
-               excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
-               numOfSampledNeuronsPattern1_corr, sampledPopPattern1Spikes_corr, numOfSampledNeuronsControl_corr, sampledPopControlSpikes_corr)
+plot_fig4_column(fig, 5, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
+                 excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
+                 sampledPopPattern1Spikes_corr, sampledPopControlSpikes_corr)
 
 fig.canvas.draw()
 
@@ -654,11 +638,20 @@ sampledPopControlSpikes_corr = sampledPopControl_corr.get_data('spikes', clear="
 simTimeIni = timePreSim + timeSimFig4A + timeSimFig4B + timeSimFig4C + timeSimFig4D
 simTimeFin = timePreSim + timeSimFig4A + timeSimFig4B + timeSimFig4C + timeSimFig4D + timeSimFig4E
 
-im = plotFig4Column(fig, 6, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
-                    excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
-                    numOfSampledNeuronsPattern1_corr, sampledPopPattern1Spikes_corr, numOfSampledNeuronsControl_corr, sampledPopControlSpikes_corr)
+im = plot_fig4_column(fig, 6, timeStep, simTimeIni, simTimeFin, timeBoundKernel,
+                      excSpikes, pattern1Spikes, pattern1_stimSpikes, pattern2Spikes, pattern2_stimSpikes, patternIntersectionSpikes, controlSpikes, inhibSpikes,
+                      sampledPopPattern1Spikes_corr, sampledPopControlSpikes_corr)
+
+plt.gcf().set_tight_layout(True)
+
+cbar_ax = fig.add_axes([0.015, 0.80, 0.01, 0.15])
+cbar = fig.colorbar(im, cax=cbar_ax, ticks=[0, 50, 100, 150, 200])
+cbar.ax.set_yticklabels(['0', '50', '100', '150', '200'])
+cbar.ax.set_ylabel('Rate [Hz]')
+cbar.ax.yaxis.labelpad = -60
 
 fig.canvas.draw()
+
 plt.show()
 
 print("\nTotal simulated time: %s milliseconds" % simTimeFin)
